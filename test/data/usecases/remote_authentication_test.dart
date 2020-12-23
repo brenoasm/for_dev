@@ -28,11 +28,17 @@ class RemoteAuthentication {
 
 main() {
   group('RemoteAuthentication', () {
-    test('should call http client with correct values', () async {
-      final httpClient = HttpClientSpy();
-      final url = faker.internet.httpUrl();
-      final sut = RemoteAuthentication(httpClient: httpClient, url: url);
+    HttpClient httpClient;
+    String url;
+    RemoteAuthentication sut;
 
+    setUp(() async {
+      httpClient = HttpClientSpy();
+      url = faker.internet.httpUrl();
+      sut = RemoteAuthentication(httpClient: httpClient, url: url);
+    });
+
+    test('should call http client with correct values', () async {
       await sut.auth();
 
       verify(httpClient.request(url: url, method: 'post'));
