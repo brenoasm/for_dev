@@ -6,12 +6,14 @@ import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 
-class HttpAdapter {
+import 'package:for_dev/data/http/http.dart';
+
+class HttpAdapter implements HttpClient {
   final Client client;
 
   HttpAdapter(this.client);
 
-  Future<void> request({
+  Future<Map> request({
     @required String url,
     @required String method,
     Map body,
@@ -23,11 +25,13 @@ class HttpAdapter {
 
     final jsonBody = body != null ? jsonEncode(body) : null;
 
-    await client.post(
+    final result = await client.post(
       url,
       headers: headers,
       body: jsonBody,
     );
+
+    return jsonDecode(result.body);
   }
 }
 
@@ -46,6 +50,16 @@ main() {
 
   group('HttpAdapter | Post', () {
     test('should call post with correct values', () async {
+      when(
+        client.post(
+          any,
+          headers: anyNamed('headers'),
+          body: anyNamed('body'),
+        ),
+      ).thenAnswer(
+        (_) async => Response('{"any_key":"any_value"}', 200),
+      );
+
       await sut.request(
         url: url,
         method: 'post',
@@ -65,6 +79,16 @@ main() {
     });
 
     test('should call post with correct without body', () async {
+      when(
+        client.post(
+          any,
+          headers: anyNamed('headers'),
+          body: anyNamed('body'),
+        ),
+      ).thenAnswer(
+        (_) async => Response('{"any_key":"any_value"}', 200),
+      );
+
       await sut.request(
         url: url,
         method: 'post',
@@ -73,6 +97,21 @@ main() {
       verify(
         client.post(any, headers: anyNamed('headers')),
       );
+    });
+
+    test('should return data if post returns 200', () async {
+      when(
+        client.post(
+          any,
+          headers: anyNamed('headers'),
+        ),
+      ).thenAnswer(
+        (_) async => Response('{"any_key":"any_value"}', 200),
+      );
+
+      final result = await sut.request(url: url, method: 'post');
+
+      expect(result, {'any_key': 'any_value'});
     });
   });
 }
