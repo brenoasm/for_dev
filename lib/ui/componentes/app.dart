@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../pages/login_page.dart';
+import '../pages/login/login_page.dart';
 
 class App extends StatelessWidget {
   final primaryColor = Color.fromRGBO(136, 14, 79, 1);
@@ -57,7 +57,7 @@ class App extends StatelessWidget {
           ),
         ),
       ),
-      home: LoginPage(),
+      home: LoginPage(null),
     );
   }
 }
