@@ -20,6 +20,7 @@ dev_dependencies:
   mockito:
   faker:
   flutter_launcher_icons: ^0.8.1
+  provider:
   
   flutter_test:
     sdk: flutter
