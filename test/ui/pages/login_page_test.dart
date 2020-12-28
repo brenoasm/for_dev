@@ -258,5 +258,13 @@ main() {
 
       expect(find.text(error), findsOneWidget);
     });
+
+    testWidgets('should close streams on dispose', (tester) async {
+      await loadPage(tester);
+
+      addTearDown(() {
+        verify(presenter.dispose()).called(1);
+      });
+    });
   });
 }
