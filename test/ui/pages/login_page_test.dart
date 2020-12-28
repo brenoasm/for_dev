@@ -5,11 +5,16 @@ import 'package:for_dev/ui/pages/login_page.dart';
 
 main() {
   group('LoginPage', () {
-    testWidgets('should load with correct initialState', (tester) async {
+    Future<void> loadPage(WidgetTester tester) async {
       final loginPage = MaterialApp(
         home: LoginPage(),
       );
+
       await tester.pumpWidget(loginPage);
+    }
+
+    testWidgets('should load with correct initialState', (tester) async {
+      await loadPage(tester);
 
       final emailTextChildren = find.descendant(
         of: find.bySemanticsLabel('Email'),
@@ -39,5 +44,7 @@ main() {
 
       expect(button.onPressed, null);
     });
+
+    testWidgets('should call validate with correct values', (tester) async {});
   });
 }
