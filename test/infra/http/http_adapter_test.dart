@@ -122,5 +122,13 @@ main() {
 
       expect(result, null);
     });
+
+    test('should return null if post returns 204', () async {
+      mockResponse(204, body: '');
+
+      final result = await sut.request(url: url, method: 'post');
+
+      expect(result, null);
+    });
   });
 }
