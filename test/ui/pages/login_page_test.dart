@@ -189,5 +189,20 @@ main() {
         isNotNull,
       );
     });
+
+    testWidgets('should disable button if form is invalid', (tester) async {
+      await loadPage(tester);
+
+      isFormValidController.add(false);
+
+      await tester.pump();
+
+      final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
+
+      expect(
+        button.onPressed,
+        null,
+      );
+    });
   });
 }
