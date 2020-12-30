@@ -5,10 +5,16 @@ import 'package:meta/meta.dart';
 import '../protocols/protocols.dart';
 
 class LoginState {
+  String email;
   String emailError;
+  String password;
   String passwordError;
 
-  bool get isFormValid => false;
+  bool get isFormValid =>
+      emailError == null &&
+      passwordError == null &&
+      email != null &&
+      password != null;
 }
 
 class StreamLoginPresenter {
@@ -29,12 +35,14 @@ class StreamLoginPresenter {
   void _update() => _controller.add(_state);
 
   void validateEmail(String value) {
+    _state.email = value;
     _state.emailError = validation.validate(field: 'email', value: value);
 
     _update();
   }
 
   void validatePassword(String value) {
+    _state.password = value;
     _state.passwordError = validation.validate(field: 'password', value: value);
 
     _update();
