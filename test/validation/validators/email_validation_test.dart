@@ -27,5 +27,9 @@ main() {
     test('should return null if email is null', () async {
       expect(sut.validate(null), null);
     });
+
+    test('should return null if email is valid', () async {
+      expect(sut.validate('breno.augusto@gmail.com'), null);
+    });
   });
 }
