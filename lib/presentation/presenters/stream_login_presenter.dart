@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 
 import '../protocols/protocols.dart';
 
+import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
 
 class LoginState {
@@ -11,6 +12,7 @@ class LoginState {
   String emailError;
   String password;
   String passwordError;
+  String mainError;
   bool isLoading = false;
 
   bool get isFormValid =>
@@ -31,6 +33,8 @@ class StreamLoginPresenter {
       _controller.stream.map((state) => state.emailError).distinct();
   Stream<String> get passwordErrorStream =>
       _controller.stream.map((state) => state.passwordError).distinct();
+  Stream<String> get mainErrorStream =>
+      _controller.stream.map((state) => state.mainError).distinct();
   Stream<bool> get isFormValidStream =>
       _controller.stream.map((state) => state.isFormValid).distinct();
   Stream<bool> get isLoadingStream =>
@@ -62,9 +66,13 @@ class StreamLoginPresenter {
 
     _update();
 
-    await authentication.auth(
-      AuthenticationParams(email: _state.email, secret: _state.password),
-    );
+    try {
+      await authentication.auth(
+        AuthenticationParams(email: _state.email, secret: _state.password),
+      );
+    } on DomainError catch (e) {
+      _state.mainError = e.description;
+    }
 
     _state.isLoading = false;
 
