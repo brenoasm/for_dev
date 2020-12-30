@@ -14,20 +14,18 @@ class EmailValidation implements FieldValidation {
 
 main() {
   group('EmailValidation', () {
+    EmailValidation sut;
+
+    setUp(() async {
+      sut = EmailValidation('any_field');
+    });
+
     test('should return null if email is empty', () async {
-      final sut = EmailValidation('any_field');
-
-      final error = sut.validate('');
-
-      expect(error, null);
+      expect(sut.validate(''), null);
     });
 
     test('should return null if email is null', () async {
-      final sut = EmailValidation('any_field');
-
-      final error = sut.validate(null);
-
-      expect(error, null);
+      expect(sut.validate(null), null);
     });
   });
 }
