@@ -6,6 +6,7 @@ import '../protocols/protocols.dart';
 
 class LoginState {
   String emailError;
+  String passwordError;
 
   bool get isFormValid => false;
 }
@@ -27,5 +28,9 @@ class StreamLoginPresenter {
     _state.emailError = validation.validate(field: 'email', value: value);
 
     _controller.add(_state);
+  }
+
+  void validatePassword(String value) {
+    _state.passwordError = validation.validate(field: 'password', value: value);
   }
 }
