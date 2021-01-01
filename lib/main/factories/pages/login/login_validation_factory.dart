@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import '../../../../main/builders/builders.dart';
 import '../../../../presentation/protocols/protocols.dart';
 import '../../../../validation/validators/validators.dart';
 import '../../../../validation/protocols/protocols.dart';
@@ -11,8 +12,7 @@ Validation makeLoginValidation() {
 @visibleForTesting
 List<FieldValidation> makeLoginValidations() {
   return [
-    RequiredFieldValidation('email'),
-    EmailValidation('email'),
-    RequiredFieldValidation('password'),
+    ...ValidationBuilder.field('email').required().email().build(),
+    ...ValidationBuilder.field('password').required().build(),
   ];
 }
