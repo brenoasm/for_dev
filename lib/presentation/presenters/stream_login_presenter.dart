@@ -7,6 +7,8 @@ import '../protocols/protocols.dart';
 import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
 
+import '../../ui/pages/login/login_presenter.dart';
+
 class LoginState {
   String email;
   String emailError;
@@ -22,7 +24,7 @@ class LoginState {
       password != null;
 }
 
-class StreamLoginPresenter {
+class StreamLoginPresenter implements LoginPresenter {
   final Validation validation;
   final Authentication authentication;
 

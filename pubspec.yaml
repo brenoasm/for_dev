@@ -10,6 +10,7 @@ dependencies:
   meta: ^1.2.4
   http: ^0.12.2
   equatable:
+  get:
 
   flutter:
     sdk: flutter
