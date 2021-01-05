@@ -10,7 +10,7 @@ dependencies:
   meta: ^1.2.4
   http: ^0.12.2
   equatable:
-  get: ^3.4.2
+  get: 3.4.2
   provider:
 
   flutter:
