@@ -10,7 +10,8 @@ dependencies:
   meta: ^1.2.4
   http: ^0.12.2
   equatable:
-  get:
+  get: ^3.4.2
+  provider:
 
   flutter:
     sdk: flutter
@@ -22,7 +23,6 @@ dev_dependencies:
   mockito:
   faker:
   flutter_launcher_icons: ^0.8.1
-  provider:
   
   flutter_test:
     sdk: flutter

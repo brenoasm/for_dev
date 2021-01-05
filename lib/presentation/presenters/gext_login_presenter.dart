@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+import 'package:get/state_manager.dart';
 import 'package:meta/meta.dart';
 
 import '../protocols/protocols.dart';
@@ -14,7 +14,6 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
 
   String _email;
   String _password;
-
   var _emailError = RxString();
   var _passwordError = RxString();
   var _mainError = RxString();
@@ -27,22 +26,19 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   Stream<bool> get isFormValidStream => _isFormValid.stream;
   Stream<bool> get isLoadingStream => _isLoading.stream;
 
-  GetxLoginPresenter({
-    @required this.validation,
-    @required this.authentication,
-  });
+  GetxLoginPresenter(
+      {@required this.validation, @required this.authentication});
 
-  void validateEmail(String value) {
-    _email = value;
-    _emailError.value = validation.validate(field: 'email', value: value);
-
+  void validateEmail(String email) {
+    _email = email;
+    _emailError.value = validation.validate(field: 'email', value: email);
     _validateForm();
   }
 
-  void validatePassword(String value) {
-    _password = value;
-    _passwordError.value = validation.validate(field: 'password', value: value);
-
+  void validatePassword(String password) {
+    _password = password;
+    _passwordError.value =
+        validation.validate(field: 'password', value: password);
     _validateForm();
   }
 
@@ -55,20 +51,13 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
 
   Future<void> auth() async {
     _isLoading.value = true;
-
-    _validateForm();
-
     try {
-      await authentication.auth(
-        AuthenticationParams(email: _email, secret: _password),
-      );
-    } on DomainError catch (e) {
-      _mainError.value = e.description;
+      await authentication
+          .auth(AuthenticationParams(email: _email, secret: _password));
+    } on DomainError catch (error) {
+      _mainError.value = error.description;
     }
-
     _isLoading.value = false;
-
-    _validateForm();
   }
 
   void dispose() {}
