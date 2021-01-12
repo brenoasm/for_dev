@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/route_manager.dart';
@@ -22,6 +23,7 @@ class App extends StatelessWidget {
       initialRoute: '/login',
       getPages: [
         GetPage(name: '/login', page: makeLoginPage),
+        GetPage(name: '/surveys', page: () => Scaffold(body: Text('Enquetes'))),
       ],
     );
   }
