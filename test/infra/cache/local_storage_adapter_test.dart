@@ -27,6 +27,15 @@ main() {
     String value;
     FlutterSecureStorageSpy secureStorage;
 
+    void mockSaveSecureError() {
+      when(
+        secureStorage.write(
+          key: anyNamed('key'),
+          value: anyNamed('value'),
+        ),
+      ).thenThrow(Exception());
+    }
+
     setUp(() async {
       key = faker.lorem.word();
       value = faker.guid.guid();
@@ -38,6 +47,14 @@ main() {
       await sut.saveSecure(key: key, value: value);
 
       verify(secureStorage.write(key: key, value: value));
+    });
+
+    test('should throw if save secure throws', () async {
+      mockSaveSecureError();
+
+      final future = sut.saveSecure(key: key, value: value);
+
+      expect(future, throwsA(TypeMatcher<Exception>()));
     });
   });
 }
