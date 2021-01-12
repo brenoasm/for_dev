@@ -12,6 +12,7 @@ dependencies:
   equatable:
   get: 3.4.2
   provider:
+  flutter_secure_storage:
 
   flutter:
     sdk: flutter
