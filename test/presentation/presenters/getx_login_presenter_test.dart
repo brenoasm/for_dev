@@ -40,6 +40,10 @@ main() {
           authentication.auth(any),
         );
 
+    PostExpectation mockSaveCurrentAccountCall() => when(
+          saveCurrentAccount.save(any),
+        );
+
     void mockAuthentication() {
       mockAutheticationCall().thenAnswer(
         (_) async => AccountEntity(token),
@@ -48,6 +52,10 @@ main() {
 
     void mockAuthenticationError(DomainError error) {
       mockAutheticationCall().thenThrow(error);
+    }
+
+    void mockSaveCurrentAccountError() {
+      mockSaveCurrentAccountCall().thenThrow(DomainError.unexpected);
     }
 
     setUp(() async {
@@ -192,6 +200,21 @@ main() {
           AccountEntity(token),
         ),
       ).called(1);
+    });
+
+    test('should emit UnexpectedError if SaveCurrentAccount fails', () async {
+      mockSaveCurrentAccountError();
+
+      sut.validateEmail(email);
+      sut.validatePassword(password);
+
+      expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+      sut.mainErrorStream.listen(
+        expectAsync1((error) =>
+            expect(error, 'Algo errado aconteceu. Tente novamente em breve')),
+      );
+
+      await sut.auth();
     });
 
     test('should emit correct events on Authentication success', () async {
