@@ -21,11 +21,16 @@ class FetchSecureCacheStorageSpy extends Mock
 
 main() {
   group('LocalSaveCurrentAccount', () {
-    test('should call FetchSecureCacheStorage with correct value', () async {
-      final fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
-      final sut = LocalLoadCurrentAccount(
-          fetchSecureCacheStorage: fetchSecureCacheStorage);
+    LocalLoadCurrentAccount sut;
+    FetchSecureCacheStorageSpy fetchSecureCacheStorage;
 
+    setUp(() async {
+      fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
+      sut = LocalLoadCurrentAccount(
+          fetchSecureCacheStorage: fetchSecureCacheStorage);
+    });
+
+    test('should call FetchSecureCacheStorage with correct value', () async {
       await sut.load();
 
       verify(fetchSecureCacheStorage.fetchSecure('token')).called(1);
