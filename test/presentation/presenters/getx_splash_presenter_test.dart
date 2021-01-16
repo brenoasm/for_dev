@@ -17,12 +17,16 @@ class GetxSplashPresenter implements SplashPresenter {
 
   @override
   Future<void> checkAccount() async {
-    final account = await loadCurrentAccount.load();
+    try {
+      final account = await loadCurrentAccount.load();
 
-    if (account == null) {
+      if (account == null) {
+        _navigateTo.value = '/login';
+      } else {
+        _navigateTo.value = '/surveys';
+      }
+    } catch (e) {
       _navigateTo.value = '/login';
-    } else {
-      _navigateTo.value = '/surveys';
     }
   }
 
@@ -37,8 +41,15 @@ main() {
     LoadCurrentAccountSpy loadCurrentAccount;
     GetxSplashPresenter sut;
 
+    PostExpectation mockLoadCurrentAccountCall() =>
+        when(loadCurrentAccount.load());
+
     void mockLoadCurrentAccount({AccountEntity account}) {
-      when(loadCurrentAccount.load()).thenAnswer((_) async => account);
+      mockLoadCurrentAccountCall().thenAnswer((_) async => account);
+    }
+
+    void mockLoadCurrentAccountError() {
+      mockLoadCurrentAccountCall().thenThrow(Exception());
     }
 
     setUp(() async {
@@ -67,6 +78,20 @@ main() {
 
     test('should go to login page on null result', () async {
       mockLoadCurrentAccount(account: null);
+
+      sut.navigateToStream.listen(
+        expectAsync1(
+          (page) => expect(page, '/login'),
+        ),
+      );
+
+      await sut.checkAccount();
+
+      verify(loadCurrentAccount.load()).called(1);
+    });
+
+    test('should go to login page on error', () async {
+      mockLoadCurrentAccountError();
 
       sut.navigateToStream.listen(
         expectAsync1(
