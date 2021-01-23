@@ -32,7 +32,7 @@ main() {
     });
 
     test('should call LoadCurrentAccount', () async {
-      await sut.checkAccount();
+      await sut.checkAccount(durationInSeconds: 0);
 
       verify(loadCurrentAccount.load()).called(1);
     });
@@ -44,7 +44,7 @@ main() {
         ),
       );
 
-      await sut.checkAccount();
+      await sut.checkAccount(durationInSeconds: 0);
 
       verify(loadCurrentAccount.load()).called(1);
     });
@@ -58,7 +58,7 @@ main() {
         ),
       );
 
-      await sut.checkAccount();
+      await sut.checkAccount(durationInSeconds: 0);
 
       verify(loadCurrentAccount.load()).called(1);
     });
@@ -72,7 +72,7 @@ main() {
         ),
       );
 
-      await sut.checkAccount();
+      await sut.checkAccount(durationInSeconds: 0);
 
       verify(loadCurrentAccount.load()).called(1);
     });
