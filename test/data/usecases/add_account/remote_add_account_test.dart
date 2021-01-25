@@ -50,6 +50,7 @@ main() {
         password: faker.internet.password(),
         passwordConfirmation: faker.internet.password(),
       );
+      mockHttpData(mockValidData());
     });
 
     test('should call http client with correct values', () async {
@@ -100,6 +101,25 @@ main() {
       final future = sut.add(params);
 
       expect(future, throwsA(DomainError.emailInUse));
+    });
+
+    test('should return an Account if HttpClient returns 200', () async {
+      final validData = mockValidData();
+      mockHttpData(validData);
+
+      final account = await sut.add(params);
+
+      expect(account.token, validData['accessToken']);
+    });
+
+    test(
+        'should throw UnexpectedError if HttpClient returns 200 with invalid data',
+        () async {
+      mockHttpData({'invalid_key': 'invalid_value'});
+
+      final future = sut.add(params);
+
+      expect(future, throwsA(DomainError.unexpected));
     });
   });
 }
