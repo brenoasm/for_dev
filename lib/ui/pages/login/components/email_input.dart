@@ -16,7 +16,7 @@ class EmailInput extends StatelessWidget {
         return TextFormField(
           onChanged: presenter.validateEmail,
           decoration: InputDecoration(
-            labelText: 'Email',
+            labelText: R.strings.email,
             icon: Icon(
               Icons.email,
               color: Theme.of(context).primaryColorLight,
