@@ -8,15 +8,16 @@ import 'package:get/route_manager.dart';
 import 'package:mockito/mockito.dart';
 
 import 'package:for_dev/ui/pages/pages.dart';
+import 'package:for_dev/ui/helpers/helpers.dart';
 
 class LoginPresenterSpy extends Mock implements LoginPresenter {}
 
 main() {
   group('LoginPage', () {
     LoginPresenter presenter;
-    StreamController<String> emailErrorController;
-    StreamController<String> passwordErrorController;
-    StreamController<String> mainErrorController;
+    StreamController<UIError> emailErrorController;
+    StreamController<UIError> passwordErrorController;
+    StreamController<UIError> mainErrorController;
     StreamController<String> navigateToController;
     StreamController<bool> isFormValidController;
     StreamController<bool> isLoadingController;
@@ -128,13 +129,23 @@ main() {
     testWidgets('should present error if email is invalid', (tester) async {
       await loadPage(tester);
 
-      final error = 'any error';
+      emailErrorController.add(UIError.invalidField);
+
+      await tester.pump();
+
+      expect(find.text('Campo inválido'), findsOneWidget);
+    });
+
+    testWidgets('should present error if email is empty', (tester) async {
+      await loadPage(tester);
+
+      final error = UIError.requiredField;
 
       emailErrorController.add(error);
 
       await tester.pump();
 
-      expect(find.text(error), findsOneWidget);
+      expect(find.text('Campo obrigatório'), findsOneWidget);
     });
 
     testWidgets('should present no error if email is valid', (tester) async {
@@ -153,54 +164,22 @@ main() {
       );
     });
 
-    testWidgets('should present no error if email is valid', (tester) async {
-      await loadPage(tester);
-
-      emailErrorController.add('');
-
-      await tester.pump();
-
-      expect(
-        find.descendant(
-          of: find.bySemanticsLabel('Email'),
-          matching: find.byType(Text),
-        ),
-        findsOneWidget,
-      );
-    });
-
     testWidgets('should present error if password is invalid', (tester) async {
       await loadPage(tester);
 
-      final error = 'any error';
+      final error = UIError.requiredField;
 
       passwordErrorController.add(error);
 
       await tester.pump();
 
-      expect(find.text(error), findsOneWidget);
+      expect(find.text('Campo obrigatório'), findsOneWidget);
     });
 
     testWidgets('should present no error if password is valid', (tester) async {
       await loadPage(tester);
 
       passwordErrorController.add(null);
-
-      await tester.pump();
-
-      expect(
-        find.descendant(
-          of: find.bySemanticsLabel('Senha'),
-          matching: find.byType(Text),
-        ),
-        findsOneWidget,
-      );
-    });
-
-    testWidgets('should present no error if password is valid', (tester) async {
-      await loadPage(tester);
-
-      passwordErrorController.add('');
 
       await tester.pump();
 
@@ -275,15 +254,27 @@ main() {
       expect(find.byType(CircularProgressIndicator), findsNothing);
     });
 
-    testWidgets('should present if auth fails', (tester) async {
+    testWidgets('should present error message if authentication fails',
+        (tester) async {
       await loadPage(tester);
 
-      final error = 'main error';
+      mainErrorController.add(UIError.invalidCredentials);
+      await tester.pump();
+
+      expect(find.text('Credenciais inválidas.'), findsOneWidget);
+    });
+
+    testWidgets('should present error message if authentication throws',
+        (tester) async {
+      await loadPage(tester);
+
+      final error = UIError.unexpected;
 
       mainErrorController.add(error);
       await tester.pump();
 
-      expect(find.text(error), findsOneWidget);
+      expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
+          findsOneWidget);
     });
 
     testWidgets('should change page', (tester) async {

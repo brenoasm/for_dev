@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
 
+import 'package:for_dev/presentation/protocols/protocols.dart';
 import 'package:for_dev/validation/validators/validators.dart';
 
 main() {
@@ -15,11 +16,11 @@ main() {
     });
 
     test('should return error if value is empty', () async {
-      expect(sut.validate(''), 'Campo Obrigatório');
+      expect(sut.validate(''), ValidationError.requiredField);
     });
 
     test('should return error if value is null', () async {
-      expect(sut.validate(null), 'Campo Obrigatório');
+      expect(sut.validate(null), ValidationError.requiredField);
     });
   });
 }

@@ -3,6 +3,7 @@ import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../../componentes/components.dart';
+import '../../helpers/helpers.dart';
 
 import 'components/components.dart';
 
@@ -39,7 +40,7 @@ class LoginPage extends StatelessWidget {
           presenter.mainErrorStream.listen(
             (error) {
               if (error != null) {
-                showErrorMessage(context, error);
+                showErrorMessage(context, error.description);
               }
             },
           );
@@ -79,7 +80,7 @@ class LoginPage extends StatelessWidget {
                             FlatButton.icon(
                               onPressed: () {},
                               icon: Icon(Icons.person),
-                              label: Text('Criar Conta'),
+                              label: Text(R.strings.addAccount),
                             ),
                           ],
                         ),
@@ -95,13 +96,3 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-
-// class _LoginPageState extends State<LoginPage> {
-//   @override
-//   void dispose() {
-//     super.dispose();
-
-//     presenter.dispose();
-//   }
-
-// }
