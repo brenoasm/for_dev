@@ -1,3 +1,4 @@
+import 'package:for_dev/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:faker/faker.dart';
 import 'package:test/test.dart';
@@ -66,6 +67,39 @@ main() {
           },
         ),
       );
+    });
+
+    test('should throw UnexpectedError if HttpClient returns 400', () async {
+      mockHttpError(HttpError.badRequest);
+
+      final future = sut.add(params);
+
+      expect(future, throwsA(DomainError.unexpected));
+    });
+
+    test('should throw UnexpectedError if HttpClient returns 404', () async {
+      mockHttpError(HttpError.notFound);
+
+      final future = sut.add(params);
+
+      expect(future, throwsA(DomainError.unexpected));
+    });
+
+    test('should throw UnexpectedError if HttpClient returns 500', () async {
+      mockHttpError(HttpError.serverError);
+
+      final future = sut.add(params);
+
+      expect(future, throwsA(DomainError.unexpected));
+    });
+
+    test('should throw InvalidCredentialsError if HttpClient returns 403',
+        () async {
+      mockHttpError(HttpError.forbidden);
+
+      final future = sut.add(params);
+
+      expect(future, throwsA(DomainError.emailInUse));
     });
   });
 }
