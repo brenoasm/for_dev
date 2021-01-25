@@ -24,4 +24,8 @@ class EnUs implements Translations {
   String get password => 'Password';
   @override
   String get loading => 'Wait...';
+  @override
+  String get name => 'Name';
+  @override
+  String get confirmPassword => 'Confirm password';
 }
